@@ -3,12 +3,14 @@
 #include <cstring>
 using namespace std;
 
+uint32_t frame_buf[videoPixels];
+
 PPUclass::PPUclass() {
-    frame_buf = new uint8_t[videoPixels*sizeof(uint32_t)]; 
+    
 }
 
 PPUclass::~PPUclass() {
-    delete[] frame_buf;
+    
 }
 
 void PPUclass::processFrame() {

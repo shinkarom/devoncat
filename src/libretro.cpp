@@ -26,6 +26,7 @@ char retro_base_directory[4096];
 char retro_game_path[4096];
 
 PPUclass* PPU;
+APUclass* APU;
 
 static void fallback_log(enum retro_log_level level, const char *fmt, ...)
 {
@@ -42,6 +43,7 @@ static retro_environment_t environ_cb;
 void retro_init(void)
 {
    PPU = new PPUclass;
+   APU = new APUclass;
    const char *dir = NULL;
    if (environ_cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &dir) && dir)
    {
@@ -53,7 +55,7 @@ void retro_init(void)
 void retro_deinit(void)
 {
    delete PPU;
-   frame_buf = NULL;
+   delete APU;
 }
 
 unsigned retro_api_version(void)
@@ -147,7 +149,6 @@ void retro_set_video_refresh(retro_video_refresh_t cb)
 
 static unsigned x_coord;
 static unsigned y_coord;
-static unsigned phase;
 static int mouse_rel_x;
 static int mouse_rel_y;
 
@@ -169,14 +170,9 @@ static void check_variables(void)
 }
 
 static void audio_callback(void)
-{
-   for (unsigned i = 0; i < 30000 / 60; i++, phase++)
-   {
-      int16_t val = 0x800 * sinf(2.0f * M_PI * phase * 300.0f / 30000.0f);
-      audio_cb(val, val);
-   }
-
-   phase %= 100;
+{ 
+	APU->processFrame();
+	audio_batch_cb(audio_buffer, 30000/60);
 }
 
 static void audio_set_state(bool enable)

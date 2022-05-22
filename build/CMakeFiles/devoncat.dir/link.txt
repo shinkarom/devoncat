@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC -shared -Wl,-soname,libdevoncat.so.1 -o libdevoncat.so.1 CMakeFiles/devoncat.dir/src/PPU.cpp.o CMakeFiles/devoncat.dir/src/libretro.cpp.o  -lunicorn-common -lriscv32-softmmu 

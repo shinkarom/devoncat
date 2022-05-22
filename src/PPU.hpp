@@ -10,7 +10,7 @@ constexpr int videoHeight = 224;
 constexpr int videoPixels = videoWidth * videoHeight;
 constexpr int videoPitch = videoWidth * sizeof(uint32_t);
 
-static uint8_t *frame_buf;
+extern uint32_t frame_buf[videoPixels];
 
 class PPUclass : PPUinterface {
     public:

@@ -1,3 +1,0 @@
-/home/shinkar/Documents/devoncat/build/CMakeFiles/rebuild_cache.dir
-/home/shinkar/Documents/devoncat/build/CMakeFiles/edit_cache.dir
-/home/shinkar/Documents/devoncat/build/CMakeFiles/devoncat.dir

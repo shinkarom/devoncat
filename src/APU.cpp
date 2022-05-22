@@ -1,18 +1,27 @@
 #include "APU.hpp"
 
 #include <cstdint>
+#include <cmath>
+#include <cstdio>
 using namespace std;
 
-static int16_t* audio_buffer;
+static unsigned phase;
+int16_t audio_buffer[30000];
 
 APUclass::APUclass(){
-    audio_buffer = new int16_t[2 * 30000 / 60];
+   phase = 0;
 }
 
 APUclass::~APUclass(){
-    delete[] audio_buffer;
+    
 }
 
 void APUclass::processFrame(){
-
+	for (unsigned i = 0; i < 30000 / 60; i++, phase++)
+   {
+      int16_t val = 0x800 * sinf(2.0f * M_PI * phase * 300.0f / 30000.0f);
+	  audio_buffer[i*2] = val;
+	  audio_buffer[i*2+1] = val;
+   }
+   phase %= 100;
 }
