@@ -14,6 +14,7 @@ using namespace std;
 
 #include <unicorn/unicorn.h>
 
+#include "CPU.hpp"
 #include "PPU.hpp"
 #include "APU.hpp"
 
@@ -25,6 +26,7 @@ static float last_sample_rate;
 char retro_base_directory[4096];
 char retro_game_path[4096];
 
+CPUclass* CPU;
 PPUclass* PPU;
 APUclass* APU;
 
@@ -42,6 +44,7 @@ static retro_environment_t environ_cb;
 
 void retro_init(void)
 {
+	CPU = new CPUclass;
    PPU = new PPUclass;
    APU = new APUclass;
    const char *dir = NULL;
@@ -54,6 +57,7 @@ void retro_init(void)
 
 void retro_deinit(void)
 {
+	delete CPU;
    delete PPU;
    delete APU;
 }
