@@ -8,9 +8,9 @@ using namespace std;
 
 extern int16_t audio_buffer[30000];
 
-class APUclass : public APUinterface {
+class CAPU : public IAPU {
 	public:
-		APUclass();
-		~APUclass();
+		CAPU();
+		~CAPU();
 		void processFrame();
 };

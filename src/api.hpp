@@ -1,17 +1,31 @@
 #pragma once
 
+#include <cstdint>
+using namespace std;
 
-class CPUinterface {
-	public:
-		virtual void loadROM(char* fileName) = 0;
+constexpr int memorySizeKB = 4 * 1024;
+constexpr int RAMSizeKB = 512;
+constexpr int ROMSizeKB = memorySizeKB - RAMSizeKB;
+
+class ICPU {
+
 };
 
-class PPUinterface {
+class IMemory {
+	public:
+		virtual void loadROM(const void* data, size_t size) = 0;
+};
+
+class IBus {
+	
+};
+
+class IPPU {
     public:
        virtual void processFrame() = 0;
 };
 
-class APUinterface {
+class IAPU {
     public:
         virtual void processFrame() = 0;
 };

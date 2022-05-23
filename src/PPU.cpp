@@ -5,15 +5,15 @@ using namespace std;
 
 uint32_t frame_buf[videoPixels];
 
-PPUclass::PPUclass() {
+CPPU::CPPU() {
     
 }
 
-PPUclass::~PPUclass() {
+CPPU::~CPPU() {
     
 }
 
-void PPUclass::processFrame() {
+void CPPU::processFrame() {
     memset(frame_buf, 0, videoPixels * sizeof(uint32_t));
 }
 

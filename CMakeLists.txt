@@ -7,5 +7,5 @@ add_library(devoncat SHARED ${SRC})
 set_target_properties(devoncat PROPERTIES
     SOVERSION 1
     PUBLIC_HEADER src/libretro.h)
-target_link_libraries(devoncat unicorn-common riscv32-softmmu)
+#target_link_libraries(devoncat )
 target_include_directories(devoncat PRIVATE src)

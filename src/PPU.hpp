@@ -12,10 +12,10 @@ constexpr int videoPitch = videoWidth * sizeof(uint32_t);
 
 extern uint32_t frame_buf[videoPixels];
 
-class PPUclass : PPUinterface {
+class CPPU : IPPU {
     public:
-        PPUclass();
-        ~PPUclass();
+        CPPU();
+        ~CPPU();
         void processFrame();
         const void* getFrameBuf();
 };

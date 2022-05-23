@@ -8,15 +8,15 @@ using namespace std;
 static unsigned phase;
 int16_t audio_buffer[30000];
 
-APUclass::APUclass(){
+CAPU::CAPU(){
    phase = 0;
 }
 
-APUclass::~APUclass(){
+CAPU::~CAPU(){
     
 }
 
-void APUclass::processFrame(){
+void CAPU::processFrame(){
 	for (unsigned i = 0; i < 30000 / 60; i++, phase++)
    {
       int16_t val = 0x800 * sinf(2.0f * M_PI * phase * 300.0f / 30000.0f);

@@ -1,5 +1,11 @@
 #include "CPU.hpp"
 
-void CPUclass::loadROM(char* fileName) {
+using inttype = uint32_t;
+
+CCPU::CCPU() {
+	
+}
+
+CCPU::~CCPU() {
 	
 }

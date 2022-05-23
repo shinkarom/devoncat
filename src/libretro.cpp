@@ -3,17 +3,14 @@
 #include <cstdlib>
 #include <cstdarg>
 #include <cstring>
-#include <cmath>
 #include <iostream>
-#include <cstdio>
 #if defined(_WIN32) && !defined(_XBOX)
 #include <cwindows>
 #endif
 #include "libretro.h"
 using namespace std;
 
-#include <unicorn/unicorn.h>
-
+#include "Memory.hpp"
 #include "CPU.hpp"
 #include "PPU.hpp"
 #include "APU.hpp"
@@ -26,9 +23,10 @@ static float last_sample_rate;
 char retro_base_directory[4096];
 char retro_game_path[4096];
 
-CPUclass* CPU;
-PPUclass* PPU;
-APUclass* APU;
+CMemory* Memory;
+CCPU* CPU;
+CPPU* PPU;
+CAPU* APU;
 
 static void fallback_log(enum retro_log_level level, const char *fmt, ...)
 {
@@ -44,9 +42,10 @@ static retro_environment_t environ_cb;
 
 void retro_init(void)
 {
-	CPU = new CPUclass;
-   PPU = new PPUclass;
-   APU = new APUclass;
+	Memory = new CMemory;
+	CPU = new CCPU;
+   PPU = new CPPU;
+   APU = new CAPU;
    const char *dir = NULL;
    if (environ_cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &dir) && dir)
    {
@@ -57,6 +56,7 @@ void retro_init(void)
 
 void retro_deinit(void)
 {
+	delete Memory;
 	delete CPU;
    delete PPU;
    delete APU;
@@ -77,7 +77,7 @@ void retro_get_system_info(struct retro_system_info *info)
    memset(info, 0, sizeof(*info));
    info->library_name     = "devoncat";
    info->library_version  = "0.1";
-   info->need_fullpath    = true;
+   info->need_fullpath    = false;
    info->valid_extensions = "";
 }
 
@@ -216,7 +216,7 @@ bool retro_load_game(const struct retro_game_info *info)
       return false;
    }
 
-   snprintf(retro_game_path, sizeof(retro_game_path), "%s", info->path);
+	Memory->loadROM(info->data, info->size);
 
    struct retro_audio_callback audio_cb = { audio_callback, audio_set_state };
    use_audio_cb = environ_cb(RETRO_ENVIRONMENT_SET_AUDIO_CALLBACK, &audio_cb);
