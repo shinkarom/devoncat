@@ -4,6 +4,7 @@
 using namespace std;
 
 #include "api.hpp"
+#include "Bus.hpp"
 
 constexpr int videoWidth = 256;
 constexpr int videoHeight = 224;
@@ -12,9 +13,11 @@ constexpr int videoPitch = videoWidth * sizeof(uint32_t);
 
 extern uint32_t frame_buf[videoPixels];
 
-class CPPU : IPPU {
+class CPPU {
+	private:
+		CBus* bus;
     public:
-        CPPU();
+        CPPU(CBus* b);
         ~CPPU();
         void processFrame();
         const void* getFrameBuf();

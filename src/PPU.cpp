@@ -5,7 +5,7 @@ using namespace std;
 
 uint32_t frame_buf[videoPixels];
 
-CPPU::CPPU() {
+CPPU::CPPU(CBus* b) : bus(b) {
     
 }
 

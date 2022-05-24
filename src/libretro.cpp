@@ -11,6 +11,7 @@
 using namespace std;
 
 #include "Memory.hpp"
+#include "Bus.hpp"
 #include "CPU.hpp"
 #include "PPU.hpp"
 #include "APU.hpp"
@@ -25,6 +26,7 @@ char retro_game_path[4096];
 bool loaded = false;
 
 CMemory* Memory;
+CBus* Bus;
 CCPU* CPU;
 CPPU* PPU;
 CAPU* APU;
@@ -43,10 +45,10 @@ static retro_environment_t environ_cb;
 
 void retro_init(void)
 {
-	Memory = new CMemory;
-	CPU = new CCPU(Memory);
-   PPU = new CPPU;
-   APU = new CAPU;
+	Bus = new CBus;
+	CPU = new CCPU(Bus);
+   PPU = new CPPU(Bus);
+   APU = new CAPU(Bus);
    const char *dir = NULL;
    if (environ_cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &dir) && dir)
    {
@@ -57,10 +59,10 @@ void retro_init(void)
 
 void retro_deinit(void)
 {
-	delete Memory;
 	delete CPU;
-   delete PPU;
-   delete APU;
+	delete PPU;
+	delete APU;
+	delete Bus;
 }
 
 unsigned retro_api_version(void)
@@ -220,7 +222,7 @@ bool retro_load_game(const struct retro_game_info *info)
       return false;
    }
 
-	loaded = Memory->loadROM(info->data, info->size);
+	loaded = Bus->loadROM(info->data, info->size);
 
    struct retro_audio_callback audio_cb = { audio_callback, audio_set_state };
    use_audio_cb = environ_cb(RETRO_ENVIRONMENT_SET_AUDIO_CALLBACK, &audio_cb);

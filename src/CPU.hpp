@@ -1,9 +1,11 @@
+#pragma once
 #include "api.hpp"
+#include "Bus.hpp"
 
-class CCPU : public ICPU {
+class CCPU {
 	private:
-		IMemory* mem;
+		CBus* bus;
 	public:
-		CCPU(IMemory* m);
+		CCPU(CBus* b);
 		~CCPU();
 };

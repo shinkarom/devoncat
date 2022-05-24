@@ -1,31 +1,35 @@
 #include "Memory.hpp"
 
 #include <iostream>
-#include <cstring>
-#include <fstream>
+#include <algorithm>
+#include <random>
 
 CMemory::CMemory() {
-	memory.resize(memorySizeKB*1024);
-	memset(memory.data(), 0, memorySizeKB*1024);
+	
 }
 
 CMemory::~CMemory() {
 	
 }
 
-bool CMemory::loadROM(const void* data, size_t size) {
-	if(size>ROMSizeKB*1024)
-		return false;
-	if(size<16)
-		return false;
-	uint8_t header[16];
-	memcpy(header, data, 16);
-	string magic_num = "DEVONCAT";
-	for(int i = 0; i< 8; i++)
-	{
-		if(header[i]!=magic_num[i])
-			return false;
+uint8_t CMemory::readByte(uint32_t address){
+	return memory[address - startAddress];
+}
+
+void CMemory::writeByte(uint32_t address, uint8_t value){
+	if(!readOnly)
+		memory[address - startAddress] = value;
+}
+
+void CMemory::fillWithZeroes(){
+	fill(memory.begin(), memory.end(), 0);
+}
+
+void CMemory::fillWithRandomValues(){
+	random_device r;
+	default_random_engine engine(r());
+	uniform_int_distribution<uint8_t> distribution(0, 255);
+	for(int i = 0; i < memory.size(); i++){
+		memory[i] = distribution(engine);
 	}
-	memcpy(memory.data(), (uint8_t*)data + 16, size-16);
-	return true;
 }

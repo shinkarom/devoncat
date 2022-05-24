@@ -1,16 +1,15 @@
 #pragma once
 
-#include <cstdint>
-using namespace std;
-
 #include "api.hpp"
-#include "libretro.h"
+#include "Bus.hpp"
 
 extern int16_t audio_buffer[30000];
 
-class CAPU : public IAPU {
+class CAPU {
+	private:
+		CBus* bus;
 	public:
-		CAPU();
+		CAPU(CBus* b);
 		~CAPU();
 		void processFrame();
 };

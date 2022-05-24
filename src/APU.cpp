@@ -8,7 +8,7 @@ using namespace std;
 static unsigned phase;
 int16_t audio_buffer[30000];
 
-CAPU::CAPU(){
+CAPU::CAPU(CBus* b): bus(b) {
    phase = 0;
 }
 
