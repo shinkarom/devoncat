@@ -22,6 +22,7 @@ static float last_aspect;
 static float last_sample_rate;
 char retro_base_directory[4096];
 char retro_game_path[4096];
+bool loaded = false;
 
 CMemory* Memory;
 CCPU* CPU;
@@ -43,7 +44,7 @@ static retro_environment_t environ_cb;
 void retro_init(void)
 {
 	Memory = new CMemory;
-	CPU = new CCPU;
+	CPU = new CCPU(Memory);
    PPU = new CPPU;
    APU = new CAPU;
    const char *dir = NULL;
@@ -78,7 +79,7 @@ void retro_get_system_info(struct retro_system_info *info)
    info->library_name     = "devoncat";
    info->library_version  = "0.1";
    info->need_fullpath    = false;
-   info->valid_extensions = "";
+   info->valid_extensions = "bin";
 }
 
 static retro_video_refresh_t video_cb;
@@ -175,6 +176,7 @@ static void check_variables(void)
 
 static void audio_callback(void)
 { 
+	if(!loaded) return;
 	APU->processFrame();
 	audio_batch_cb(audio_buffer, 30000/60);
 }
@@ -186,6 +188,8 @@ static void audio_set_state(bool enable)
 
 void retro_run(void)
 {
+	if(!loaded) return;
+	
    unsigned i;
    update_input();
 
@@ -216,7 +220,7 @@ bool retro_load_game(const struct retro_game_info *info)
       return false;
    }
 
-	Memory->loadROM(info->data, info->size);
+	loaded = Memory->loadROM(info->data, info->size);
 
    struct retro_audio_callback audio_cb = { audio_callback, audio_set_state };
    use_audio_cb = environ_cb(RETRO_ENVIRONMENT_SET_AUDIO_CALLBACK, &audio_cb);

@@ -1,7 +1,9 @@
 #include "api.hpp"
 
 class CCPU : public ICPU {
-public:
-		CCPU();
+	private:
+		IMemory* mem;
+	public:
+		CCPU(IMemory* m);
 		~CCPU();
 };
