@@ -5,7 +5,6 @@ CBus::CBus(){
 	ROM.memory.resize(ROMSizeKB*1024);
 	ROM.readOnly = true;
 	ROM.fillWithZeroes();
-	RAM.startAddress = RAMStart;
 	RAM.memory.resize(RAMSizeKB*1024);
 	RAM.fillWithRandomValues();
 }
@@ -19,7 +18,7 @@ uint8_t CBus::readByte(uint32_t address){
 	if(address < RAMStart)
 		return ROM.readByte(address);
 	else
-		return RAM.readByte(address);
+		return RAM.readByte(address - RAMStart);
 }
 
 void CBus::writeByte(uint32_t address, uint8_t value){
@@ -27,7 +26,7 @@ void CBus::writeByte(uint32_t address, uint8_t value){
 	if(address < RAMStart)
 		ROM.writeByte(address, value);
 	else
-		RAM.writeByte(address, value);
+		RAM.writeByte(address, value - RAMStart);
 }
 
 bool CBus::loadROM(const void* data, size_t size) {

@@ -195,6 +195,7 @@ void retro_run(void)
    unsigned i;
    update_input();
 
+	CPU->processFrame();
    PPU->processFrame();
 	video_cb(frame_buf, videoWidth, videoHeight, videoPitch);
 

@@ -13,12 +13,12 @@ CMemory::~CMemory() {
 }
 
 uint8_t CMemory::readByte(uint32_t address){
-	return memory[address - startAddress];
+	return memory[address];
 }
 
 void CMemory::writeByte(uint32_t address, uint8_t value){
 	if(!readOnly)
-		memory[address - startAddress] = value;
+		memory[address] = value;
 }
 
 void CMemory::fillWithZeroes(){

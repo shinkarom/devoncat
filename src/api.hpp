@@ -9,3 +9,5 @@ constexpr int memorySizeKB = 4 * 1024;
 constexpr int RAMSizeKB = 512;
 constexpr int ROMSizeKB = memorySizeKB - RAMSizeKB;
 constexpr int RAMStart = 0 + ROMSizeKB*1024;
+constexpr int clockRate = 3 * 1024 * 1024;
+constexpr int clockRatePerFrame = clockRate / 60;
