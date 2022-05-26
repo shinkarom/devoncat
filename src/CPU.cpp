@@ -8,6 +8,18 @@ constexpr int RTypeMask = 0xFE00707F;
 inttype registers[32];
 inttype pc;
 
+int getRd(uint32_t instr) {
+	return (instr>>7) &0b11111;
+}
+
+int getRs1(uint32_t instr) {
+	return (instr>>15) &0b11111;
+}
+
+int getRs2(uint32_t instr) {
+	return (instr>>20) &0b11111;
+}
+
 inttype CCPU::getRegister(int regNumber){
 	assert(regNumber>0 && regNumber <32);
 	return registers[regNumber];
@@ -43,7 +55,6 @@ void CCPU::runOneInstruction() {
 	pc += 4;
 	if((instruction & opcodeMask) == 0x6F) //JAL
 	{
-		//cout<<"jal"<<endl;
 		int rd = (instruction>>7)&0b11111;
 		setRegister(rd, pc);
 		//shuffle bits
@@ -58,7 +69,10 @@ void CCPU::runOneInstruction() {
 	}
 	else if ((instruction & RTypeMask) == 0x33) //ADD
 	{
-		//cout<<"add"<<endl;
+		int rd = getRd(instruction);
+		int rs1 = getRs1(instruction);
+		int rs2 = getRs2(instruction);
+		setRegister(rd, getRegister(rs1)+getRegister(rs2));		
 	}
 	else {
 		cout<<"pc was "<<pc<<", instruction was "<<hex<<instruction<<endl;
