@@ -2,22 +2,23 @@
 #include <iostream>
 #include <cassert>
 
-constexpr int opcodeMask = 0b1111111;
 constexpr int RTypeMask = 0xFE00707F;
+constexpr int ISBTypeMask = 0x707F;
+constexpr int UJTypeMask = 0x7F;
 
 inttype registers[32];
 inttype pc;
 
 int getRd(uint32_t instr) {
-	return (instr>>7) &0b11111;
+	return (instr>>7) & 0x1F;
 }
 
 int getRs1(uint32_t instr) {
-	return (instr>>15) &0b11111;
+	return (instr>>15) & 0x1F;
 }
 
 int getRs2(uint32_t instr) {
-	return (instr>>20) &0b11111;
+	return (instr>>20) & 0x1F;
 }
 
 inttype CCPU::getRegister(int regNumber){
@@ -53,7 +54,7 @@ void CCPU::runNInstructions(int numInstructions) {
 void CCPU::runOneInstruction() {
 	auto instruction = bus->read<uint32_t>(pc);
 	pc += 4;
-	if((instruction & opcodeMask) == 0x6F) //JAL
+	if((instruction & UJTypeMask) == 0x6F) //JAL
 	{
 		int rd = (instruction>>7)&0b11111;
 		setRegister(rd, pc);
@@ -66,6 +67,16 @@ void CCPU::runOneInstruction() {
 		imm = (imm ^ signExtendMask) - signExtendMask;
 		imm <<= 1;
 		pc += imm;
+	}
+	else if((instruction&UJTypeMask)==0x37){ //LUI
+		int rd = getRd(instruction); 
+		inttype imm = instruction & !UJTypeMask;
+		setRegister(rd, imm);
+	}
+	else if((instruction&UJTypeMask)==0x17){ //AUIPC
+		int rd = getRd(instruction); 
+		inttype imm = instruction & !UJTypeMask;
+		setRegister(rd, imm+pc-4);
 	}
 	else if ((instruction & RTypeMask) == 0x33) //ADD
 	{
